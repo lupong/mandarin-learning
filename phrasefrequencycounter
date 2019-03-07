@@ -1,0 +1,194 @@
+import collections
+import operator
+import csv
+import re
+
+# TODO 8/4/2017 11:29AM
+# I DID IT! Find biggest combinations and remove from data
+# TODO 2) Take user input for K
+
+k_combination = 5 #take user input + 1
+k_combination_list = list(reversed(range(2, k_combination)))
+special_characters = '一。，：“”；？.'
+
+def checkCharacter(string, characters):
+    is_in_string = False
+    for character in characters:
+        if character in string:
+            is_in_string = True
+            print ('special Character is in string.')
+    return is_in_string
+
+with open(r"C:\Users\andrew.pongco\Desktop\testchinese.txt", "r", encoding='utf16') as infile:
+    data = infile.read()
+    modified_data = [data]
+    combination_list = []
+    print ('START')
+    print(k_combination_list)
+    for k in k_combination_list:
+        combination_list_queue = []
+        first_character = 0
+        last_character = k
+        print('iteration_one')
+        while last_character != (len(modified_data[-1]) + 1):
+            combination_list_queue.append(''.join(modified_data[-1][first_character:last_character]))
+            first_character = first_character + 1
+            last_character = last_character + 1
+            print ('combination_list_queue is ' + str(combination_list_queue))
+        for combination in combination_list_queue:
+            combination_removal_list = []
+            print ('FOR LOOP')
+            print (combination)
+            print (collections.Counter(combination_list_queue)[combination])
+            if collections.Counter(combination_list_queue)[combination] >= 2 and checkCharacter(combination, special_characters) == False:
+                print ('COMBO!')
+                print (combination)
+                print (type(combination))
+                combination_list.append(combination)
+                combination_removal_list.append(combination)
+                print ('remove this')
+                print (combination_removal_list)
+                print ('combo list updated')
+                print (combination_list)
+                print (modified_data)
+                for combination_to_be_removed in combination_removal_list:
+                    print ('combination to be remove')
+                    print (combination_to_be_removed)
+                    m = re.search(combination_to_be_removed, modified_data[-1])
+                    modified_data.append(modified_data[-1][:m.start()] + modified_data[-1][m.end():])
+    x = 0
+    while x < len(modified_data[-1]):
+        combination_list.append(modified_data[-1][x])
+        x = x + 1
+
+
+print (combination_list)
+
+total_combination_list = collections.Counter(combination_list)
+print (total_combination_list)
+sorted_total_combination_count_list = sorted(total_combination_list.items(), key=operator.itemgetter(1), reverse=True)
+print ('sorted total list is')
+print (sorted_total_combination_count_list)
+
+
+    # collect user input : , refactor character list to use input from as k in combinatorial
+    # TRY - make k combination list from range, for number in range
+
+    # print(k_combination_list[k_position])
+    # print(k_combination_list)
+    # print(k_combination_list[k_position])
+    # test_list = ('fdsafdsa', 'fdasfdasf', 'fdsafdasfds')
+    #
+    # print(test_list)
+    # print(test_list[0])
+    # print(''.join(test_list[0:2]))
+# 08/02/2017 2:32P - create a list of number of letter combinations
+
+
+# with open(r"C:\Users\andrew.pongco\Desktop\testchinese.txt", "r", encoding='utf16') as infile:
+#     data = list(infile.read())
+#     combination_list = []
+#     for k in k_combination_list:
+#         combination_list_queue = []
+#         combination_count_list = []
+#         first_character = 0
+#         last_character = k
+#         while last_character != len(data):
+#             combination_list_queue.append(''.join(data[first_character:last_character]))
+#             first_character = first_character + 1
+#             last_character = last_character + 1
+#         combination_count_list = collections.Counter(combination_list_queue)
+#         for combination in combination_count_list:
+#             if combination.value != 1:
+#                 combination_list.append(combination)
+
+
+                # with open(r"C:\Users\andrew.pongco\Desktop\testchinese.txt", "r", encoding='utf16') as infile:
+#     data = infile.read()
+#     leftcharacter = 0
+#     rightcharacter = 1
+#     combined_two_character_list = []
+#     # print(data[leftcharacter])
+#     # print(data[rightcharacter])
+#     # print(data[leftcharacter] + data[rightcharacter])
+#
+#     while rightcharacter != len(data):
+#         # print('yes')
+#         # print(rightcharacter)
+#         # print(leftcharacter)
+#         combined_two_character_list.append(data[leftcharacter] + data[rightcharacter])
+#         leftcharacter = leftcharacter + 1
+#         rightcharacter = rightcharacter + 1
+# #
+#     combined_characters_count_list = collections.Counter(combined_two_character_list)
+#     print (combined_characters_count_list)
+#     sorted_characters = sorted(combined_characters_count_list.items(), key=operator.itemgetter(1), reverse=True)
+#     print (sorted_characters)
+#
+#     print (len(data))
+#     print(data[leftcharacter])
+#     print (list(data))
+#     print(list(combined_two_character_list))
+#     with open(r'C:\Users\andrew.pongco\Desktop\charactercombinationfrequencylist.csv', 'w', encoding='utf16') as csvfile:
+#         fieldnames = ['character', 'count']
+#         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+#
+#         writer.writeheader()
+#         for k, v in combined_characters_count_list.items():
+#             writer.writerow({'character': k,'count': v})
+
+# print("你好")
+
+# need to have parenthesis around print statement
+
+# file_name = "C:\\Users\\andrew.pongco\\Desktop\\test.txt"
+# file_object = open(file_name, "r")
+# data = infile.read()
+# print(data)
+
+# I tried text.txt - read somewhere that i need to specify the full path
+# Tried the full path getting this error: SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape
+# tried added double slashes - escape characters
+# getting this error: <_io.TextIOWrapper name='C:\\Users\\andrew.pongco\\Desktop\\test.txt' mode='r' encoding='cp1252'>
+# changed structure of call. getting this error - NameError: name 'infile' is not defined
+# trying a whole new method.
+
+# this counts frequency of each character in text file and sorts it by number descending order
+
+# with open(r"C:\Users\andrew.pongco\Desktop\testchinese.txt", "r", encoding='utf16') as infile:
+#     data = infile.read()
+#     letters = collections.Counter(data)
+#     sorted_letters = sorted(letters.items(), key=operator.itemgetter(1), reverse=True)
+#
+#     for p in sorted_letters:
+#         print(p)
+
+    #print(sorted_letters, sep='\n')
+    #print(sorted_letters)
+    # for k, v in sorted_letters.items():
+    #     print(k, v)
+    #print(letters)
+
+
+# Yes! This worked. Next. Try counting frequencies
+# try split each character, put into a list, then count each character # this works! imported collections library.
+# 8/2/2017 11:29 try reading chinese characters
+# getting this error - file contains in Unicode format. .txt uses ANSI encoded text file
+# changed encoding to Unicode when saving file
+# ran - got this error - UnicodeDecodeError: 'charmap' codec can't decode byte 0x8d in position 81: character maps to <undefined>
+# need to tell open() call to use encoding argument
+# changed encoding to utf16 on open() method
+
+# NEXT try to write each key:value pair on individual row in console - DONE https://docs.python.org/3/tutorial/datastructures.html#
+# NEXT try ordering it by value - imported operator library, need to make a sorted list from dictionary
+    # try printing each item in list. Added Reverse=TRUE param to sorted method
+# NEXT try to write to a new file
+
+# with open(r"C:\Users\andrew.pongco\Desktop\test.txt", "a", encoding='utf16') as infile:
+#     infile.write('a bunch of stuff')
+
+    #got this error - io.UnsupportedOperation: not writable#
+    # change r to w - read only to write https://stackoverflow.com/questions/27278755/unsupported-operation-not-writeable-python
+        # change w to a - this appends data to the file
+
+# f= open("C:\\Users\\andrew.pongco\\Desktop\\test2.txt", 'w+')
